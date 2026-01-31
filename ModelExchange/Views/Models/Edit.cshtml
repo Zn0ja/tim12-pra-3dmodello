@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@model ModelExchange.ViewModels.EditModel3DVm
+
+@{
+    ViewData["Title"] = T["Title_Edit"];
+}
+
+<h2>@T["Title_Edit"]</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Name"]</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Description"]</label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Tags"]</label>
+        <input asp-for="Tags" class="form-control" />
+        <span asp-validation-for="Tags" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Category"]</label>
+        <input asp-for="Category" class="form-control" />
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Visibility"]</label>
+        <select asp-for="Visibility" class="form-select">
+            <option value="public">@T["Opt_Public"]</option>
+            <option value="private">@T["Opt_Private"]</option>
+        </select>
+        <span asp-validation-for="Visibility" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">@T["Btn_Save"]</button>
+    <a class="btn btn-secondary" asp-action="My">@T["Btn_Cancel"]</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

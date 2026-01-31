@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@model ModelExchange.ViewModels.UploadModel3DVm
+
+@{
+    ViewData["Title"] = T["Title_Upload"];
+}
+
+<h2>@T["Title_Upload"]</h2>
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Name"]</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Description"]</label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Tags"]</label>
+        <input asp-for="Tags" class="form-control" placeholder="@T["Ph_TagsExample"]" />
+        <span asp-validation-for="Tags" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Category"]</label>
+        <input asp-for="Category" class="form-control" />
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_Visibility"]</label>
+        <select asp-for="Visibility" class="form-select">
+            <option value="public">@T["Opt_Public"]</option>
+            <option value="private">@T["Opt_Private"]</option>
+        </select>
+        <span asp-validation-for="Visibility" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_File"]</label>
+        <input asp-for="File" type="file" class="form-control" />
+        <div class="form-text">@T["Hint_FileTypes"]</div>
+        <span asp-validation-for="File" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">@T["Btn_Upload"]</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

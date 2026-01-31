@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@model ModelExchange.Models.Model3D
+
+@{
+    ViewData["Title"] = T["Title_Delete"];
+}
+
+<h2>@T["Title_Delete"]</h2>
+
+<div class="alert alert-warning">
+    @T["Msg_ConfirmDelete"] <b>@Model.Name</b>?
+</div>
+
+<ul class="list-group mb-3">
+    <li class="list-group-item"><b>@T["Lbl_Visibility"]:</b> @Model.Visibility</li>
+    <li class="list-group-item"><b>@T["Lbl_File"]:</b> @Model.FilePath</li>
+</ul>
+
+<form asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button class="btn btn-danger" type="submit">@T["Btn_Delete"]</button>
+    <a class="btn btn-secondary" asp-action="My">@T["Btn_Cancel"]</a>
+</form>

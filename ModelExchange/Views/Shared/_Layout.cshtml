@@ -1,0 +1,125 @@
+﻿@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ModelExchange</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ModelExchange.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                <a class="navbar-brand fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">
+                    ModelExchange
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@T["Nav_Home"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Models" asp-action="Index">@T["Nav_Explore"]</a>
+                        </li>
+
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Models" asp-action="Upload">@T["Nav_Upload"]</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Models" asp-action="My">@T["Nav_MyModels"]</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Models" asp-action="Favorites">@T["Nav_Favorites"]</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Profile" asp-action="Edit">@T["Nav_Profile"]</a>
+                            </li>
+                        }
+                    </ul>
+
+                    @{
+                        var current = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                        var returnUrl = Context.Request.Path + Context.Request.QueryString;
+                    }
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <form asp-controller="Localization" asp-action="SetLanguage" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"
+                                        aria-label="@T["Aria_Language"]">
+                                    @(current == "hr" ? "HR" : current == "nl" ? "NL" : "EN")
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><button class="dropdown-item" type="submit" name="culture" value="hr">@T["Lang_HR"]</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="culture" value="en">@T["Lang_EN"]</button></li>
+                                    <li><button class="dropdown-item" type="submit" name="culture" value="nl">@T["Lang_NL"]</button></li>
+                                </ul>
+                            </div>
+                        </form>
+
+                        <button id="themeToggle"
+                                type="button"
+                                class="btn btn-outline-secondary"
+                                onclick="toggleTheme()"
+                                title="@T["Btn_ToggleTheme"]"
+                                aria-label="@T["Aria_ToggleTheme"]">
+                            🌙
+                        </button>
+
+                        <div class="d-flex align-items-center">
+                            <partial name="_LoginPartial" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - ModelExchange - <a asp-area="" asp-controller="Home" asp-action="Privacy">@T["Footer_Privacy"]</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

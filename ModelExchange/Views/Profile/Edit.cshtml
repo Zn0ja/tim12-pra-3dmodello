@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@model string
+
+@{
+    ViewData["Title"] = T["Title_ProfileEdit"];
+    var current = (string?)ViewBag.CurrentDisplayName ?? "";
+}
+
+<h2>@T["Title_ProfileEdit"]</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@T["Msg_ProfileUpdated"]</div>
+}
+
+@if (!string.IsNullOrWhiteSpace(current))
+{
+    <div class="mb-2">
+        <strong>@T["Lbl_CurrentDisplayName"]:</strong> @current
+    </div>
+}
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">@T["Lbl_DisplayName"]</label>
+
+        <input class="form-control"
+               name="displayName"
+               value="@Model" />
+
+        <div class="form-text">@T["Help_DisplayName"]</div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">@T["Btn_Save"]</button>
+</form>
+
+<div asp-validation-summary="All" class="text-danger"></div>

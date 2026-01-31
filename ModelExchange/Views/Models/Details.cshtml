@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer T
+@model ModelExchange.Models.Model3D
+
+<h2>@Model.Name</h2>
+
+@if (!string.IsNullOrWhiteSpace(Model.Description))
+{
+    <p>@Model.Description</p>
+}
+
+<p class="text-muted">
+    @T["Lbl_By"] <b>@(ViewBag.OwnerDisplayName ?? "unknown")</b>
+</p>
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <form asp-action="ToggleFavorite" method="post" class="mb-2">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button class="btn btn-outline-warning px-3 py-2" type="submit">
+            @(((bool)(ViewBag.IsFavorite ?? false)) ? T["Btn_RemoveFavorite"] : T["Btn_AddFavorite"])
+        </button>
+    </form>
+}
+else
+{
+    <div class="text-muted mb-2">
+        <small>@T["Msg_LoginToFavorite"]</small>
+    </div>
+}
+
+<div style="height:520px; border:1px solid #ccc; border-radius:8px;">
+    <canvas id="viewer" style="width:100%; height:100%; display:block;"></canvas>
+</div>
+
+<script>
+    window.MODEL_URL = "@Model.FilePath";
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script src="~/js/viewer.js?v=@DateTime.UtcNow.Ticks"></script>

@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@model List<ModelExchange.Models.Model3D>
+
+@{
+    ViewData["Title"] = T["Title_Favorites"];
+}
+
+<h2>@T["Title_Favorites"]</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        @T["Msg_NoFavorites"]
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var m in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 h-100">
+
+                    <h5 class="mb-1">@m.Name</h5>
+
+                    <div class="text-muted mb-2" style="font-size: 0.9rem;">
+                        @if (!string.IsNullOrWhiteSpace(m.Category))
+                        {
+                            <span class="badge bg-secondary">@m.Category</span>
+                        }
+                        <span class="ms-2">@m.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</span>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(m.Tags))
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted">@T["Lbl_Tags"]: @m.Tags</small>
+                        </div>
+                    }
+
+                    <div class="mt-auto d-flex gap-2">
+                        <a class="btn btn-outline-primary px-3 py-2"
+                           asp-controller="Models"
+                           asp-action="Details"
+                           asp-route-id="@m.Id">
+                            @T["Btn_Open"]
+                        </a>
+
+                        <form asp-controller="Models" asp-action="ToggleFavorite" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@m.Id" />
+                            <button class="btn btn-outline-warning px-3 py-2" type="submit">
+                                @T["Btn_Remove"]
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+}

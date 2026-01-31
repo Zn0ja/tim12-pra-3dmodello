@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer T
+@model List<ModelExchange.Models.Model3D>
+
+@{
+    ViewData["Title"] = T["Title_MyModels"];
+    string visibility = ViewBag.Visibility ?? "";
+    string search = ViewBag.Search ?? "";
+}
+
+<h2>@T["Title_MyModels"]</h2>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6">
+        <label class="form-label">@T["Lbl_Search"]</label>
+        <input name="search" value="@search" class="form-control" placeholder="@T["Ph_SearchByName"]" />
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">@T["Lbl_Visibility"]</label>
+        <select name="visibility" class="form-select">
+            <option value="" selected="@(string.IsNullOrEmpty(visibility))">@T["Opt_All"]</option>
+            <option value="public" selected="@(visibility == "public")">@T["Opt_Public"]</option>
+            <option value="private" selected="@(visibility == "private")">@T["Opt_Private"]</option>
+        </select>
+    </div>
+
+    <div class="col-md-2 d-flex gap-2">
+        <button class="btn btn-primary w-100" type="submit">@T["Btn_Apply"]</button>
+    </div>
+
+    <div class="col-12">
+        <a class="btn btn-outline-secondary" asp-action="My">@T["Btn_Reset"]</a>
+    </div>
+</form>
+
+<p>
+    <a class="btn btn-primary" asp-controller="Models" asp-action="Upload">@T["Btn_UploadNew"]</a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">@T["Msg_NoModels"]</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var m in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 h-100">
+                    <h5>@m.Name</h5>
+
+                    <p class="text-muted">@T["Lbl_VisibilityValue"] @m.Visibility</p>
+
+                    <div class="d-flex gap-2 mt-auto">
+                        <a class="btn btn-outline-primary px-3 py-2"
+                           asp-controller="Models"
+                           asp-action="Details"
+                           asp-route-id="@m.Id">@T["Btn_Open"]</a>
+
+                        <a class="btn btn-outline-secondary px-3 py-2"
+                           asp-controller="Models"
+                           asp-action="Edit"
+                           asp-route-id="@m.Id">@T["Btn_Edit"]</a>
+
+                        <a class="btn btn-outline-danger px-3 py-2"
+                           asp-controller="Models"
+                           asp-action="Delete"
+                           asp-route-id="@m.Id">@T["Btn_Delete"]</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

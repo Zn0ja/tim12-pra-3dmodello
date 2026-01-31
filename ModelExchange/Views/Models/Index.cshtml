@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer T
+@model List<ModelExchange.ViewModels.ModelCardVm>
+
+@{
+    ViewData["Title"] = T["Title_Explore"];
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+    string search = ViewBag.Search ?? "";
+    string category = ViewBag.Category ?? "";
+    string sort = ViewBag.Sort ?? "";
+}
+
+<h2>@T["Title_Explore"]</h2>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-5">
+        <label class="form-label">@T["Lbl_Search"]</label>
+        <input name="search" value="@search" class="form-control" placeholder="@T["Ph_SearchByName"]" />
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">@T["Lbl_Category"]</label>
+        <select name="category" class="form-select">
+            <option value="">@T["Opt_All"]</option>
+            @foreach (var c in categories)
+            {
+                <option value="@c" selected="@(c == category)">@c</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">@T["Lbl_Sort"]</label>
+        <select name="sort" class="form-select">
+            <option value="" selected="@(string.IsNullOrEmpty(sort))">@T["Sort_Newest"]</option>
+            <option value="oldest" selected="@(sort == "oldest")">@T["Sort_Oldest"]</option>
+            <option value="name" selected="@(sort == "name")">@T["Sort_NameAZ"]</option>
+        </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2 mt-2">
+        <button class="btn btn-primary" type="submit">@T["Btn_Apply"]</button>
+        <a class="btn btn-outline-secondary" asp-controller="Models" asp-action="Index">@T["Btn_Reset"]</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">@T["Msg_NoModelsFound"]</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var m in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 h-100">
+                    <h5 class="mb-1">@m.Name</h5>
+
+                    <div class="text-muted mb-2" style="font-size: 0.9rem;">
+                        @if (!string.IsNullOrWhiteSpace(m.Category))
+                        {
+                            <span class="badge bg-secondary">@m.Category</span>
+                        }
+                        <span class="ms-2">@m.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</span>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(m.Tags))
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted">@T["Lbl_Tags"]: @m.Tags</small>
+                        </div>
+                    }
+
+                    <small class="text-muted">@T["Lbl_By"] @m.OwnerUserName</small>
+                    <br />
+
+                    <div class="mt-auto">
+                        <a class="btn btn-outline-primary px-3 py-2"
+                           asp-controller="Models"
+                           asp-action="Details"
+                           asp-route-id="@m.Id">
+                            @T["Btn_Open"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
