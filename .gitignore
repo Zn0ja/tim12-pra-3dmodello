@@ -1,0 +1,14 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build output
+**/bin/
+**/obj/
+
+# Secrets / local deps
+appsettings.Development.json
+
+# Uploaded content (veliki fajlovi)
+**/wwwroot/uploads/
