@@ -155,3 +155,18 @@ body.theme-dark .btn-outline-secondary.dropdown-toggle {
     color: var(--text) !important;
 }
 
+#account .form-floating > label,
+#registerForm .form-floating > label {
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    margin-bottom: .25rem;
+    height: auto !important;
+}
+
+#account .form-floating > .form-control,
+#registerForm .form-floating > .form-control {
+    padding-top: .375rem !important;
+    padding-bottom: .375rem !important;
+}
